@@ -1,6 +1,7 @@
+using System.Linq;
 using JetBrains.ReSharper.Feature.Services.Daemon;
-using JetBrains.ReSharper.Psi.CSharp.Tree;
 using JetBrains.ReSharper.Psi.Tree;
+using JetBrains.Util;
 
 namespace ReSharperPlugin.BadWordsReSharperPlugin.ElementProblemAnalyzer;
 
@@ -11,12 +12,14 @@ public class BadWordNamingAnalyzer : ElementProblemAnalyzer<IComment>
     protected override void Run(IComment element, ElementProblemAnalyzerData data,
         IHighlightingConsumer consumer)
     {
-        var nodeText = element.CommentText.ToLower();
-
-        if (!nodeText.Contains("crap"))
+        if (!MatchesBadWord(element.CommentText))
             return;
 
-        var warning = new BadWordNamingWarning(element, element.GetDocumentRange());
-        consumer.AddHighlighting(warning);
+        consumer.AddHighlighting(new BadWordNamingWarning(element, element.GetDocumentRange()));
+    }
+
+    private static bool MatchesBadWord(string text)
+    { 
+        return BadWordsRepository.GetMatchWord(text) != null;
     }
 }

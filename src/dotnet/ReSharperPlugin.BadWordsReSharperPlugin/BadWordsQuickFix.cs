@@ -30,14 +30,19 @@ public class BadWordsQuickFix : QuickFixBase
 
     protected override Action<ITextControl> ExecutePsiTransaction(ISolution solution, IProgressIndicator progress)
     {
-        // var newText = Regex.Replace(_comment.CommentText, "crap", "BADWORD", RegexOptions.IgnoreCase);
-
+        var oldText = _comment.CommentText;
+        
+        var word = BadWordsRepository.GetMatchWord(oldText);
+        if (word == null) throw new ArgumentException("ReSharper comment does not contain bad word.");
+        var replacement = BadWordsRepository.Words[word];
+        var newText = Regex.Replace(oldText, word, replacement, RegexOptions.IgnoreCase);
+        
         var factory = CSharpElementFactory.GetInstance(_comment);
-        var newComment = factory.CreateComment("// HAIIII");
+        var newComment = factory.CreateComment("//" + newText);
         ModificationUtil.ReplaceChild(_comment, newComment);
         return null;
     }
-
+    
     public override string Text => "Replace the bad word";
 
     public override bool IsAvailable(IUserDataHolder cache)
