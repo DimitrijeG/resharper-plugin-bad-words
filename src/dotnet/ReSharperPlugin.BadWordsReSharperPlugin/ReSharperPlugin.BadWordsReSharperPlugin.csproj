@@ -24,8 +24,4 @@
     <Compile Remove="ElementProblemAnalyzer\Ui\BadWordNamingView.xaml.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ElementProblemAnalyzer\Ui\" />
-  </ItemGroup>
-
 </Project>
