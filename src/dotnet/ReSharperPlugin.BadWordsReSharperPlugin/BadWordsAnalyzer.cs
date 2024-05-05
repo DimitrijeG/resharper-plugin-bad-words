@@ -1,7 +1,5 @@
-using System.Linq;
 using JetBrains.ReSharper.Feature.Services.Daemon;
 using JetBrains.ReSharper.Psi.Tree;
-using JetBrains.Util;
 
 namespace ReSharperPlugin.BadWordsReSharperPlugin.ElementProblemAnalyzer;
 
